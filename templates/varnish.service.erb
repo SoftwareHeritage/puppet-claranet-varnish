@@ -10,8 +10,6 @@ PrivateTmp=true
 
 ExecReload=<%= scope['::varnish::vcl_reload'] %>
 ExecStart=/usr/sbin/varnishd <%= scope['::varnish::config::jail_opt'] %> \
-  -P /var/run/varnish.pid \
-  -t 120 \
 <% unless [nil, :undefined, :undef, ''].include?(scope['::varnish::instance_name']) -%>
   -n <%= scope['::varnish::instance_name'] %> \
 <% end -%>
@@ -45,6 +43,8 @@ ExecStart=/usr/sbin/varnishd <%= scope['::varnish::config::jail_opt'] %> \
 <% scope['::varnish::storage_additional'].each do |k| -%>
   -s <%= k %> \
 <% end -%>
+  -P /var/run/varnish.pid \
+  -t 120
 
 [Install]
 WantedBy=multi-user.target
